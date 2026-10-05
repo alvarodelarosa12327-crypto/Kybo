@@ -2,6 +2,7 @@
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>La Michoacana · Puebla</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#fff7f0;--card:#fff;--ink:#2a1633;--mut:#7a6a80;--pink:#ff3d8b;--mint:#19c8a6;--sun:#ffb627;--line:#f0e2da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1022;--card:#28192f;--ink:#fdf1f6;--mut:#b9a5c0;--line:#3b2745}}
@@ -157,21 +158,26 @@ section h2::after{content:"";display:block;height:5px;width:0;margin-top:.4rem;b
 
 <script>
 // ===== CONFIGURACIÓN: el dueño debe llenar estos datos (no se inventan) =====
-const CFG={nombre:"La Michoacana",tel:"+522211663713",whatsapp:"522211663713",direccion:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue.",horario:"[Horario pendiente de proporcionar]",adminPass:"demo1234",mapsQuery:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue."};
+const CFG={nombre:"La Michoacana",tel:"+522211663713",whatsapp:"522211663713",direccion:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue.",horario:"[Horario pendiente de proporcionar]",mapsQuery:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue."};
 const ST=["Recibido","Confirmado","Preparando","Listo","Entregado"];
 const COL=["#ffd6e7","#d3f6ee","#fff0c7","#e5dcff"];
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const mx=n=>"$"+Number(n).toFixed(2);
-const seed={cats:["Paletas","Nieves","Aguas frescas","Malteadas"],prods:[{id:1,n:"Paleta de fresa",c:"Paletas",p:18,e:"🍓",d:"De agua con fresa natural",x:"Paleta helada de agua con fresa molida. Ligera, dulce y muy refrescante.",i:"Fresa, agua, azúcar",al:"Ninguno conocido",a:true},
-{id:2,n:"Paleta de mango",c:"Paletas",p:18,e:"🥭",d:"Mango con chile opcional",x:"Paleta de mango maduro; puedes pedirla con chile en polvo para un toque picosito.",i:"Mango, agua, azúcar, chile (opcional)",al:"Ninguno conocido",a:false},
-{id:3,n:"Paleta de queso",c:"Paletas",p:22,e:"🧀",d:"Cremosa, clásica de Michoacán",x:"Paleta cremosa de leche con sabor a queso, un clásico de las paleterías michoacanas.",i:"Leche, queso, azúcar",al:"Leche (lácteos)",a:true},
-{id:4,n:"Nieve de limón",c:"Nieves",p:35,e:"🍋",d:"Una bola, refrescante",x:"Nieve de agua con limón y su ralladura: ácida, fría y muy ligera.",i:"Limón, agua, azúcar",al:"Ninguno conocido",a:true},
-{id:5,n:"Nieve de vainilla",c:"Nieves",p:35,e:"🍨",d:"Una bola, cremosa",x:"Nieve cremosa con sabor suave a vainilla, ideal para acompañar cualquier postre.",i:"Leche, crema, azúcar, vainilla",al:"Leche (lácteos)",a:true},
-{id:6,n:"Agua de horchata",c:"Aguas frescas",p:30,e:"🥛",d:"Vaso grande",x:"Bebida fría de arroz con canela, dulce y cremosa, servida con hielo.",i:"Arroz, canela, azúcar, agua",al:"Puede contener trazas de leche",a:true},
-{id:7,n:"Malteada de chocolate",c:"Malteadas",p:55,e:"🍫",d:"Espesa y con crema",x:"Malteada espesa de helado y chocolate, coronada con crema batida.",i:"Helado, leche, chocolate, crema",al:"Leche, posibles trazas de nueces",a:true}],orders:[],next:1,mine:[],log:[],fav:[]};
-let S;try{S=JSON.parse(localStorage.getItem("lm2"))||seed}catch(e){S=seed}
+const SB=supabase.createClient("https://alsnympszqmlhszremwe.supabase.co","sb_publishable_aIDNL4TjcoFZzitRUjd3aA_m-f2r7QM");
+let S={cats:[],prods:[],orders:[],my:[],mine:[],fav:[]},ADM=false,sending=0;
+try{const l=JSON.parse(localStorage.getItem("lm3")||"{}");S.mine=l.mine||[];S.fav=l.fav||[]}catch(e){}
 let C=[],cat="Todas";
-function save(){try{localStorage.setItem("lm2",JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem("lm3",JSON.stringify({mine:S.mine,fav:S.fav}))}catch(e){}}
+const fromP=r=>({id:r.id,n:r.name,c:r.category,p:+r.price,e:r.emoji,d:r.short_desc,x:r.long_desc,i:r.ingredients,al:r.allergens,a:r.available});
+const fromO=r=>({id:r.id,num:r.num,n:r.name,t:r.phone||"",dl:r.delivery,addr:r.address||"",note:r.note||"",items:r.items,total:+r.total,pay:r.pay,paid:r.paid,st:r.status,at:r.created_at});
+async function loadCat(){const[c,p]=await Promise.all([SB.from("lm_categories").select("name").order("sort"),SB.from("lm_products").select("*").order("id")]);
+if(c.error||p.error){if(!S.prods.length)toast("No se pudo cargar el menú. Reintenta.");return}
+const cn=c.data.map(x=>x.name),np=p.data.map(fromP);if(JSON.stringify(np)===JSON.stringify(S.prods)&&cn.join()===S.cats.join())return;
+S.cats=cn;S.prods=np;menu();rc()}
+async function loadMine(){if(!S.mine.length)return;const{data,error}=await SB.rpc("lm_my_orders",{p_ids:S.mine});if(error)return;const prev=S.my;S.my=data.map(fromO).sort((a,b)=>b.num-a.num);
+S.my.forEach(n=>{const o=prev.find(x=>x.id===n.id);if(o&&o.st!==n.st)toast(`Tu pedido #${pad(n.num)}: ${ST[n.st]||"Cancelado"}`)});
+if($("#md").classList.contains("on")&&$("#mp").dataset.t)trk()}
+async function loadOrders(){const{data,error}=await SB.from("lm_orders").select("*").order("created_at",{ascending:false}).limit(200);if(!error)S.orders=data.map(fromO)}
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2200)}
 function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
 // contacto
@@ -202,38 +208,49 @@ function checkout(){cart(0);const m=$("#md");m.classList.add("on");$("#mp").inne
 <label>Pago<select id="f6"><option value="online">Tarjeta en línea (simulado)</option><option value="cash">Efectivo al recibir</option></select></label>
 <p class="note">Al continuar aceptas el <a onclick="legal('priv')" style="color:var(--pink)">Aviso de privacidad</a>. Los datos de tarjeta nunca se guardan en esta app: el pago real lo procesará el proveedor elegido (Stripe, Mercado Pago, etc.).</p>
 <p id="er" style="color:#e0364a"></p><button class="b1" onclick="place()">Confirmar y pagar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cancelar</button>`}
-function place(){const n=$("#f1").value.trim(),t=$("#f2").value.replace(/\D/g,""),dl=$("#f3").value==="A domicilio";
+async function place(){if(sending)return;const n=$("#f1").value.trim(),t=$("#f2").value.replace(/\D/g,""),dl=$("#f3").value==="A domicilio";
 if(n.length<2)return $("#er").textContent="Escribe tu nombre.";if(t.length<10)return $("#er").textContent="Teléfono de 10 dígitos.";if(dl&&$("#f4").value.trim().length<5)return $("#er").textContent="Falta la dirección de entrega.";
 if(C.some(l=>!S.prods.find(x=>x.id===l.id).a))return $("#er").textContent="Un producto se agotó.";
-const online=$("#f6").value==="online";
-const o={id:S.next++,n,t,dl,addr:$("#f4").value.trim(),note:$("#f5").value.trim(),items:C.map(l=>{const p=S.prods.find(x=>x.id===l.id);return{n:p.n,q:l.q,p:p.p}}),total:tot(),pay:online?"Tarjeta":"Efectivo",paid:false,st:0,at:new Date().toISOString()};
-const fin=()=>{burst(innerWidth/2,innerHeight/2,26);S.orders.push(o);S.mine.push(o.id);save();C=[];rc();$("#md").classList.remove("on");openTrack();toast("Pedido #"+pad(o.id)+" recibido")};
-if(online){$("#mp").innerHTML=`<h2>Pago seguro</h2><p>Simulación: aquí se abriría el formulario del proveedor de pagos (los datos de tarjeta nunca pasan por esta app).</p><p><b>${mx(o.total)}</b></p><button class="b1" onclick="pay(1)">Simular pago aprobado</button> <button class="b2" onclick="pay(0)">Simular pago rechazado</button><p id="pe" style="color:#e0364a"></p>`;
-window.pay=ok=>{if(ok){o.paid=true;fin()}else $("#pe").textContent="Pago rechazado. Intenta con otro método."}}else fin()}
+const online=$("#f6").value==="online",args={p_name:n,p_phone:t,p_delivery:dl,p_address:$("#f4").value.trim(),p_note:$("#f5").value.trim(),p_pay:online?"Tarjeta":"Efectivo",p_items:C.map(l=>({id:l.id,q:l.q}))};
+const send=async()=>{if(sending)return;sending=1;const{data,error}=await SB.rpc("lm_place_order",args);sending=0;
+if(error||!data||!data[0]){const m=$("#pe")||$("#er");if(m)m.textContent="No se pudo enviar el pedido. Revisa tu conexión e intenta de nuevo.";return}
+const r=data[0];burst(innerWidth/2,innerHeight/2,26);S.mine.push(r.id);save();C=[];rc();$("#md").classList.remove("on");await loadMine();openTrack();toast("Pedido #"+pad(r.num)+" recibido")};
+if(online){$("#mp").innerHTML=`<h2>Pago seguro</h2><p>Simulación: aquí se abriría el formulario del proveedor de pagos (los datos de tarjeta nunca pasan por esta app). El negocio marcará el pedido como pagado al confirmarlo.</p><p><b>${mx(S.prods.length?C.reduce((a,l)=>a+l.q*S.prods.find(x=>x.id===l.id).p,0):0)}</b></p><button class="b1" onclick="pay(1)">Simular pago aprobado</button> <button class="b2" onclick="pay(0)">Simular pago rechazado</button><p id="pe" style="color:#e0364a"></p>`;
+window.pay=ok=>{if(ok)send();else $("#pe").textContent="Pago rechazado. Intenta con otro método."}}else send()}
 const pad=n=>String(n).padStart(3,"0");
 // seguimiento
-function openTrack(){$("#md").classList.add("on");trk();}
+function openTrack(){$("#md").classList.add("on");trk();loadMine()}
 function trk(){if(!$("#md").classList.contains("on")||!$("#mp").dataset.t&&false)return;
-const os=S.orders.filter(o=>S.mine.includes(o.id)).reverse();
-$("#mp").dataset.t=1;$("#mp").innerHTML=`<h2>Mis pedidos</h2>`+(os.map(o=>`<div class="oc"><b>Pedido #${pad(o.id)}</b> · ${mx(o.total)} · ${o.paid?"Pagado":"Pago pendiente"}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))}</span><br><a class="b2" target="_blank" rel="noopener" href="${wam(o)}" style="margin-top:.5rem">📲 Enviar por WhatsApp</a>
+const os=S.my;
+$("#mp").dataset.t=1;$("#mp").innerHTML=`<h2>Mis pedidos</h2>`+(os.map(o=>`<div class="oc"><b>Pedido #${pad(o.num)}</b> · ${mx(o.total)} · ${o.paid?"Pagado":"Pago pendiente"}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))}</span><br><a class="b2" target="_blank" rel="noopener" href="${wam(o)}" style="margin-top:.5rem">📲 Enviar por WhatsApp</a>
 ${o.st<0?`<p class="no tag">Cancelado</p>`:`<div class="tl">${ST.map((s,i)=>`<div class="s ${i<o.st?"done":i===o.st?"cur":""}"><div class="d">${i<o.st?"✓":""}</div>${o.dl&&s==="Listo"?"En camino":s}</div>`).join("")}</div><b>Estado: ${o.dl&&o.st===3?"En camino":ST[o.st]}</b>`}</div>`).join("")||"<p>Aún no tienes pedidos en este dispositivo.</p>")+`<button class="b2" onclick="$('#md').classList.remove('on');delete $('#mp').dataset.t">Cerrar</button>`}
-setInterval(()=>{try{const n=JSON.parse(localStorage.getItem("lm2"));if(n&&JSON.stringify(n)!==JSON.stringify(S)){const on=$("#md").classList.contains("on")&&$("#mp").dataset.t;const prev=S;S=n;menu();rc();if(on)trk();n.orders.forEach(o=>{const p=prev.orders.find(x=>x.id===o.id);if(p&&p.st!==o.st&&S.mine.includes(o.id))toast(`Tu pedido #${pad(o.id)}: ${ST[o.st]||"Cancelado"}`)})}}catch(e){}},2000);
+setInterval(()=>{if(document.hidden)return;loadCat();ADM?loadOrders().then(()=>{if($("#md").classList.contains("on")&&$("#mp").dataset.adm)panel()}):loadMine()},15000);
 // legal
 function legal(k){const T={priv:["Aviso de privacidad","Borrador base. Responsable: [nombre/razón social del dueño]. Datos que se recaban: nombre, teléfono y, si aplica, dirección de entrega, solo para gestionar tu pedido. No se almacenan datos de tarjeta. Tienes derechos ARCO (acceso, rectificación, cancelación y oposición) conforme a la LFPDPPP; para ejercerlos escribe a [correo del dueño]."],terms:["Términos y condiciones","Borrador base. Los precios están en pesos mexicanos. La disponibilidad puede cambiar sin previo aviso. El pedido se confirma cuando el negocio lo acepta."],ref:["Cancelaciones y reembolsos","Borrador base. Puedes cancelar mientras el pedido esté en estado Recibido o Confirmado. Los reembolsos se hacen al mismo medio de pago. [El dueño debe definir plazos]."]}[k];
 $("#md").classList.add("on");delete $("#mp").dataset.t;$("#mp").innerHTML=`<h2>${T[0]}</h2><p>${T[1]}</p><p class="note">Texto de ejemplo: debe ser revisado y adaptado por el dueño y, de ser necesario, por un profesional legal.</p><button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button>`}
 // admin (DEMO: la autenticación real debe hacerse en servidor)
-function adm(){delete $("#mp").dataset.t;$("#md").classList.add("on");$("#mp").innerHTML=`<h2>Acceso del dueño</h2><input id="ap" type="password" placeholder="Contraseña (demo: demo1234)"><button class="b1" onclick="if($('#ap').value===CFG.adminPass)panel();else toast('Contraseña incorrecta')">Entrar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button><p class="note">Demo: la contraseña vive en el navegador y NO es segura. En producción el login se valida en el servidor.</p>`}
-function panel(){const m=$("#mp");m.style.width="min(760px,100%)";
-m.innerHTML=`<h2>Panel del dueño</h2><h3>Pedidos</h3>`+(S.orders.slice().reverse().map(o=>`<div class="oc"><b>#${pad(o.id)}</b> ${esc(o.n)} · ${esc(o.t)} · ${mx(o.total)} · ${o.pay} ${o.paid?"(pagado)":""}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))} · ${o.dl?"Domicilio: "+esc(o.addr):"Recoger"} · ${new Date(o.at).toLocaleTimeString("es-MX")}${o.note?" · "+esc(o.note):""}</span><br><b>${o.st<0?"Cancelado":ST[o.st]}</b> ${o.st>=0&&o.st<4?`<button class="b1" onclick="ns(${o.id},1)">→ ${ST[o.st+1]}</button> <button class="b2" onclick="if(confirm('¿Cancelar pedido?'))ns(${o.id},-9)">Cancelar</button>`:""}</div>`).join("")||"<p>Sin pedidos.</p>")+
+function adm(){delete $("#mp").dataset.t;$("#md").classList.add("on");if(ADM)return panel();
+$("#mp").innerHTML=`<h2>Acceso del dueño</h2><label>Correo<input id="ae" type="email" autocomplete="username"></label><label>Contraseña<input id="ap" type="password" autocomplete="current-password"></label><p id="ar" style="color:#e0364a"></p><button class="b1" onclick="login()">Entrar</button> <button class="b2" onclick="signup()">Crear cuenta</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button><p class="note">Solo los correos autorizados por el negocio pueden administrar. La contraseña la valida Supabase en el servidor.</p>`}
+async function chkAdmin(){const{data}=await SB.rpc("lm_is_admin");return data===true}
+async function login(){const{error}=await SB.auth.signInWithPassword({email:$("#ae").value.trim(),password:$("#ap").value});if(error)return $("#ar").textContent="Correo o contraseña incorrectos.";
+if(!(await chkAdmin())){await SB.auth.signOut();return $("#ar").textContent="Este correo no tiene permiso de administrador."}
+ADM=true;await loadOrders();panel()}
+async function signup(){const e=$("#ae").value.trim(),p=$("#ap").value;if(!e)return $("#ar").textContent="Escribe tu correo.";if(p.length<8)return $("#ar").textContent="La contraseña debe tener al menos 8 caracteres.";
+const{error}=await SB.auth.signUp({email:e,password:p});$("#ar").textContent=error?"No se pudo crear la cuenta: "+error.message:"Revisa tu correo para confirmar la cuenta y luego entra."}
+async function out(){await SB.auth.signOut();ADM=false;S.orders=[];$("#md").classList.remove("on")}
+function panel(){const m=$("#mp");m.style.width="min(760px,100%)";m.dataset.adm=1;
+m.innerHTML=`<h2>Panel del dueño</h2><h3>Pedidos</h3>`+(S.orders.map(o=>`<div class="oc"><b>#${pad(o.num)}</b> ${esc(o.n)} · ${esc(o.t)} · ${mx(o.total)} · ${o.pay} ${o.paid?"(pagado)":"(sin pagar)"}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))} · ${o.dl?"Domicilio: "+esc(o.addr):"Recoger"} · ${new Date(o.at).toLocaleString("es-MX")}${o.note?" · "+esc(o.note):""}</span><br><b>${o.st<0?"Cancelado":ST[o.st]}</b> ${o.st>=0&&o.st<4?`<button class="b1" onclick="ns('${o.id}',1)">→ ${ST[o.st+1]}</button> <button class="b2" onclick="if(confirm('¿Cancelar pedido?'))ns('${o.id}',-9)">Cancelar</button>`:""} ${!o.paid&&o.st>=0?`<button class="b2" onclick="mpaid('${o.id}')">Marcar pagado</button>`:""}</div>`).join("")||"<p>Sin pedidos.</p>")+
 `<h3>Productos</h3>`+S.prods.map(p=>`<div class="row"><div class="g"><b>${esc(p.n)}</b> <span class="tag ${p.a?"ok":"no"}">${p.a?"Disponible":"Agotado"}</span></div><input style="width:80px;margin:0" type="number" min="0" value="${p.p}" onchange="pe(${p.id},this.value)"><button class="b2" onclick="ep(${p.id})">✏️</button><button class="b2" onclick="ta(${p.id})">${p.a?"Agotar":"Activar"}</button><button class="b2" onclick="if(confirm('¿Eliminar?'))dp(${p.id})">🗑</button></div>`).join("")+
-`<h3 style="margin-top:1rem">Nuevo producto</h3><input id="n1" placeholder="Nombre"><input id="n2" placeholder="Descripción"><input id="n3" type="number" placeholder="Precio"><select id="n4">${S.cats.map(c=>`<option>${esc(c)}</option>`).join("")}</select><input id="n5" placeholder="Nueva categoría (opcional)"><button class="b1" onclick="np()">Agregar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button>`}
-function lg(a){S.log.push(new Date().toISOString()+" "+a)}
-function ns(id,d){const o=S.orders.find(x=>x.id===id);o.st=d<0?-1:o.st+d;lg("pedido "+id+" -> "+o.st);save();panel()}
-function ta(id){const p=S.prods.find(x=>x.id===id);p.a=!p.a;lg("disp "+id);save();menu();rc();panel()}
-function pe(id,v){S.prods.find(x=>x.id===id).p=Math.max(0,+v||0);lg("precio "+id);save();menu();rc()}
-function dp(id){S.prods=S.prods.filter(x=>x.id!==id);lg("borrado "+id);save();menu();rc();panel()}
-function np(){const n=$("#n1").value.trim(),p=+$("#n3").value;if(!n||!(p>=0)||$("#n3").value==="")return toast("Nombre y precio válidos");const nc=$("#n5").value.trim();if(nc&&!S.cats.includes(nc))S.cats.push(nc);
-S.prods.push({id:Date.now(),n,d:$("#n2").value.trim(),p,c:nc||$("#n4").value,e:"🍦",a:true});lg("alta "+n);save();menu();panel()}
+`<h3 style="margin-top:1rem">Nuevo producto</h3><input id="n1" placeholder="Nombre"><input id="n2" placeholder="Descripción"><input id="n3" type="number" min="0" placeholder="Precio"><select id="n4">${S.cats.map(c=>`<option>${esc(c)}</option>`).join("")}</select><input id="n5" placeholder="Nueva categoría (opcional)"><button class="b1" onclick="np()">Agregar</button> <button class="b2" onclick="out()">Cerrar sesión</button> <button class="b2" onclick="delete $('#mp').dataset.adm;$('#md').classList.remove('on')">Cerrar</button>`}
+
+async function ns(id,d){const o=S.orders.find(x=>x.id===id),st=d<0?-1:o.st+d;const{error}=await SB.from("lm_orders").update({status:st}).eq("id",id);if(error)return toast("No se pudo actualizar");o.st=st;panel()}
+async function mpaid(id){const{error}=await SB.from("lm_orders").update({paid:true}).eq("id",id);if(error)return toast("No se pudo actualizar");S.orders.find(x=>x.id===id).paid=true;panel()}
+async function ta(id){const p=S.prods.find(x=>x.id===id);const{error}=await SB.from("lm_products").update({available:!p.a}).eq("id",id);if(error)return toast("No se pudo actualizar");await loadCat();panel()}
+async function pe(id,v){const{error}=await SB.from("lm_products").update({price:Math.max(0,+v||0)}).eq("id",id);toast(error?"No se pudo guardar":"Precio guardado");await loadCat()}
+async function dp(id){const{error}=await SB.from("lm_products").delete().eq("id",id);if(error)return toast("No se pudo eliminar");await loadCat();panel()}
+async function np(){const n=$("#n1").value.trim(),p=+$("#n3").value;if(!n||!(p>=0)||$("#n3").value==="")return toast("Nombre y precio válidos");const nc=$("#n5").value.trim();
+if(nc&&!S.cats.includes(nc)){const r=await SB.from("lm_categories").insert({name:nc,sort:S.cats.length+1});if(r.error)return toast("No se pudo crear la categoría")}
+const{error}=await SB.from("lm_products").insert({name:n,short_desc:$("#n2").value.trim(),price:p,category:nc||$("#n4").value,emoji:"🍦",available:true});if(error)return toast("No se pudo agregar");await loadCat();panel()}
 // efectos
 const ly=$("#ly"),lite=(navigator.hardwareConcurrency||4)<=4||matchMedia("(prefers-reduced-motion:reduce)").matches||matchMedia("(pointer:coarse)").matches;
 if(lite)document.body.classList.add("lite");else $("#hero").addEventListener("mousemove",e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;ly.style.transform=`rotateY(${x*14}deg) rotateX(${-y*14}deg) translate(${x*20}px,${y*20}px)`});
@@ -258,7 +275,8 @@ st.onpointermove=e=>{if(!drag)return;ry+=(e.clientX-x0)*.8;rx=Math.max(-60,Math.
 st.onpointerup=st.onpointercancel=()=>drag=0;
 (function loop(){if(!$("#md").classList.contains("on")||!document.body.contains(ob))return;if(!drag&&!rm)ry+=.7;ob.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;raf=requestAnimationFrame(loop)})()}
 function ep(id){const p=S.prods.find(x=>x.id===id);$("#mp").innerHTML=`<h2>Editar ${esc(p.n)}</h2><label>Nombre<input id="e1" value="${esc(p.n)}"></label><label>Emoji<input id="e2" value="${esc(p.e||"")}"></label><label>Descripción corta<input id="e3" value="${esc(p.d||"")}"></label><label>Explicación<textarea id="e4">${esc(p.x||"")}</textarea></label><label>Ingredientes<input id="e5" value="${esc(p.i||"")}"></label><label>Alérgenos<input id="e6" value="${esc(p.al||"")}"></label><button class="b1" onclick="se(${id})">Guardar</button> <button class="b2" onclick="panel()">Volver</button>`}
-function se(id){const p=S.prods.find(x=>x.id===id),v=[1,2,3,4,5,6].map(k=>$("#e"+k).value.trim());if(!v[0])return toast("Nombre requerido");[p.n,p.e,p.d,p.x,p.i,p.al]=v;lg("editado "+id);save();menu();panel()}
+async function se(id){const v=[1,2,3,4,5,6].map(k=>$("#e"+k).value.trim());if(!v[0])return toast("Nombre requerido");
+const{error}=await SB.from("lm_products").update({name:v[0],emoji:v[1]||"🍦",short_desc:v[2],long_desc:v[3],ingredients:v[4],allergens:v[5]}).eq("id",id);if(error)return toast("No se pudo guardar");await loadCat();panel()}
 // fondo 3D constante + parallax por scroll
 const IT=[["🍓",6,12],["🧊",88,30],["🍋",12,55],["🥭",80,70],["🍨",30,85],["🍉",60,8],["🍦",48,40],["🥥",92,88],["🍒",3,80],["🧊",40,62]],FC=["rotateY(0)","rotateY(90deg)","rotateY(180deg)","rotateY(-90deg)","rotateX(90deg)","rotateX(-90deg)"];
 $("#bg3").innerHTML=IT.map((t,i)=>`<div class="bi" data-s="${(i%3+1)*.04}" style="left:${t[1]}%;top:${t[2]}%"><span style="animation-delay:-${i*1.3}s">${t[0]}</span></div>`).join("")+`<div class="bi" data-s=".07" style="left:72%;top:42%"><div class="cube">${FC.map(f=>`<s style="transform:${f} translateZ(25px)"></s>`).join("")}</div></div>`;
@@ -281,7 +299,7 @@ addEventListener("scroll",()=>{$("#pg").style.width=(scrollY/Math.max(1,document
 function surprise(){const L=S.prods.filter(p=>p.a&&p.on!==false);if(!L.length)return toast("No hay productos disponibles");const p=L[Math.floor(Math.random()*L.length)];toast("🎲 ¡Te toca: "+p.n+"!");burst(innerWidth/2,innerHeight/2,16);setTimeout(()=>openP(p.id),500)}
 addEventListener("keydown",e=>{if(e.key==="Escape"){$("#md").classList.remove("on");cart(0)}});
 const MQ=["🍓 FRESA","🥭 MANGO","🍋 LIMÓN","🥥 COCO","🍫 CHOCOLATE","🍉 SANDÍA","🧀 QUESO","🥛 HORCHATA"].join("  ✦  ")+"  ✦  ";$(".mqi").textContent=MQ+MQ;
-const wam=o=>"https://wa.me/"+CFG.whatsapp+"?text="+encodeURIComponent(`Hola, soy ${o.n}. Mi pedido #${pad(o.id)}: ${o.items.map(i=>i.q+"x "+i.n).join(", ")}. Total ${mx(o.total)}. ${o.dl?"A domicilio: "+o.addr:"Paso a recoger"}.`);
+const wam=o=>"https://wa.me/"+CFG.whatsapp+"?text="+encodeURIComponent(`Hola, soy ${o.n}. Mi pedido #${pad(o.num)}: ${o.items.map(i=>i.q+"x "+i.n).join(", ")}. Total ${mx(o.total)}. ${o.dl?"A domicilio: "+o.addr:"Paso a recoger"}.`);
 
 // ===== v4: aro arrastrable, burbujas, cursor, extras =====
 const hero=$("#hero"),ring=$(".ring"),sc=$("#sc"),bub=$("#bub");let ang=0,vel=rm?0:.4,dg=0,lx=0,hv=true,score=0;
@@ -302,5 +320,5 @@ for(let i=0;i<(lite?3:8);i++){const d=document.createElement("span");d.className
 (function(){const el=$("#tw");let i=0,j=0,del=0;function tick(){const ws=S.prods.filter(p=>p.a).map(p=>p.n);if(!ws.length)return setTimeout(tick,2000);const w=ws[i%ws.length];if(rm){el.textContent=w;i++;return setTimeout(tick,2200)}el.textContent=w.slice(0,j);if(!del&&j<w.length){j++;return setTimeout(tick,70)}if(!del){del=1;return setTimeout(tick,1400)}if(j>0){j--;return setTimeout(tick,35)}del=0;i++;setTimeout(tick,250)}tick()})();
 {const nv=$("nav");let lp=0;addEventListener("scroll",()=>{const y=scrollY;nv.classList.toggle("hd",y>120&&y>lp);lp=y},{passive:true})}
 setTimeout(()=>{const l=$("#ld");l.classList.add("out");setTimeout(()=>l.remove(),500)},rm?0:1000);
-menu();rc();
+menu();rc();loadCat();loadMine();SB.auth.getSession().then(async({data})=>{if(data.session&&await chkAdmin()){ADM=true;loadOrders()}});
 </script></body></html>
