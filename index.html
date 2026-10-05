@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Michoacana · Puebla</title>
+<style>
+:root{--bg:#fff7f0;--card:#fff;--ink:#2a1633;--mut:#7a6a80;--pink:#ff3d8b;--mint:#19c8a6;--sun:#ffb627;--line:#f0e2da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1022;--card:#28192f;--ink:#fdf1f6;--mut:#b9a5c0;--line:#3b2745}}
+:root[data-theme="dark"]{--bg:#1b1022;--card:#28192f;--ink:#fdf1f6;--mut:#b9a5c0;--line:#3b2745}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif}
+h1,h2,h3{font-family:"Trebuchet MS","Segoe UI",sans-serif;margin:0;line-height:1.1}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:.7rem 1.2rem;font-weight:700;transition:transform .15s,box-shadow .2s}
+button:hover{transform:translateY(-2px)}button:active{transform:scale(.95)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.b1{background:var(--pink);color:#fff;box-shadow:0 8px 20px #ff3d8b55}.b2{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+a.b2{display:inline-block;text-decoration:none;border-radius:999px;padding:.7rem 1.2rem;font-weight:700;color:var(--ink)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;justify-content:space-between;align-items:center;padding:.7rem 1.2rem;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px)}
+nav b{font-size:1.2rem}nav .r{display:flex;gap:.5rem}
+.hero{position:relative;min-height:88vh;display:grid;place-items:center;overflow:hidden;padding:2rem 1.2rem;text-align:center;background:radial-gradient(circle at 20% 20%,#ff3d8b33,transparent 50%),radial-gradient(circle at 80% 70%,#19c8a633,transparent 50%)}
+.hero h1{font-size:clamp(2.8rem,10vw,6.5rem);background:linear-gradient(90deg,var(--pink),var(--sun));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:34rem;margin:1rem auto 1.5rem;color:var(--mut);font-size:1.15rem}
+.hero .in{position:relative;z-index:2;animation:up .9s both}
+.scene{position:absolute;inset:0;perspective:900px;pointer-events:none}
+.layer{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .2s ease-out}
+.pop{position:absolute;width:64px;height:120px;border-radius:32px 32px 14px 14px;animation:fl 6s ease-in-out infinite;box-shadow:inset -10px -8px 0 #0002,0 20px 30px #0003}
+.pop:after{content:"";position:absolute;left:50%;bottom:-46px;width:14px;height:50px;margin-left:-7px;background:#e8c58a;border-radius:0 0 8px 8px}
+.pop:before{content:"";position:absolute;left:12px;top:10px;width:10px;height:50px;border-radius:8px;background:#fff7}
+.em{position:absolute;font-size:3.2rem;animation:fl 7s ease-in-out infinite;filter:drop-shadow(0 12px 10px #0003)}
+@keyframes fl{0%,100%{translate:0 0;rotate:-6deg}50%{translate:0 -22px;rotate:8deg}}
+@keyframes up{from{opacity:0;transform:translateY(30px)}}
+.lite .pop:nth-child(n+4),.lite .em:nth-child(n+4){display:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+section{padding:3rem 1.2rem;max-width:1100px;margin:auto}
+.rv{opacity:0;transform:translateY(28px);transition:.7s}.rv.on{opacity:1;transform:none}
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:1rem 0}.chips button{background:var(--card);color:var(--ink);border:2px solid var(--line);white-space:nowrap}
+.chips button.a{background:var(--mint);color:#fff;border-color:var(--mint)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:1rem;transition:transform .25s,box-shadow .25s;transform-style:preserve-3d}
+.card:hover{transform:perspective(600px) rotateX(3deg) rotateY(-4deg) translateY(-4px);box-shadow:0 18px 30px #0002}
+.card .pic{height:110px;border-radius:16px;display:grid;place-items:center;font-size:3.4rem;margin-bottom:.6rem}
+.card p{margin:.3rem 0;color:var(--mut);font-size:.9rem}.price{font-weight:800;font-size:1.2rem}
+.tag{display:inline-block;padding:.1rem .6rem;border-radius:99px;font-size:.75rem;font-weight:700}.ok{background:#19c8a62a;color:var(--mint)}.no{background:#ff3d3d22;color:#e0364a}
+.card.off{opacity:.65}
+.drawer,.modal{position:fixed;inset:0;z-index:40;background:#0008;display:none;justify-content:flex-end}.drawer.on,.modal.on{display:flex}
+.modal{justify-content:center;align-items:center}
+.panel{background:var(--bg);width:min(440px,100%);height:100%;overflow:auto;padding:1.2rem;animation:sl .3s}
+.modal .panel{height:auto;max-height:90%;border-radius:24px;margin:1rem}
+@keyframes sl{from{transform:translateX(40px);opacity:0}}
+.row{display:flex;gap:.7rem;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--line)}.row .g{flex:1}
+.q button{padding:.2rem .7rem;background:var(--line);color:var(--ink)}
+input,select,textarea{width:100%;padding:.7rem;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin:.3rem 0 .7rem}
+.fab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;flex-direction:column;gap:.5rem}
+.fab a{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;text-decoration:none;font-size:1.4rem;box-shadow:0 8px 18px #0003;transition:transform .2s}.fab a:hover{transform:scale(1.12)}
+.tl{display:flex;justify-content:space-between;margin:1rem 0;position:relative}
+.tl .s{flex:1;text-align:center;font-size:.72rem;color:var(--mut);position:relative}
+.tl .d{width:26px;height:26px;border-radius:50%;background:var(--line);margin:0 auto .3rem;display:grid;place-items:center;color:#fff;position:relative;z-index:1}
+.tl .s.done .d{background:var(--mint)}.tl .s.cur .d{background:var(--pink);animation:pu 1.4s infinite}
+.tl .s:not(:last-child):after{content:"";position:absolute;top:12px;left:50%;width:100%;height:3px;background:var(--line)}.tl .s.done:not(:last-child):after{background:var(--mint)}
+@keyframes pu{0%{box-shadow:0 0 0 0 #ff3d8b88}100%{box-shadow:0 0 0 14px #ff3d8b00}}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1rem;margin:.8rem 0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.7rem 1.2rem;border-radius:99px;z-index:60;animation:up .3s}
+.bump{animation:bp .4s}@keyframes bp{50%{transform:scale(1.3)}}
+footer{padding:2rem 1.2rem 6rem;text-align:center;color:var(--mut);font-size:.9rem}footer a{color:var(--pink);cursor:pointer}
+.hid{display:none!important}.note{font-size:.8rem;color:var(--mut)}
+
+.card{cursor:pointer;position:relative;transition:transform .15s,box-shadow .25s}
+.fv{position:absolute;top:.6rem;right:.6rem;background:var(--card);padding:.3rem .5rem;font-size:1.1rem;z-index:2;box-shadow:0 2px 8px #0002}
+#sq{max-width:420px}
+.stage{height:210px;perspective:700px;display:grid;place-items:center;touch-action:none;cursor:grab;background:radial-gradient(circle,#ff3d8b22,transparent 65%);border-radius:20px}
+.obj{position:relative;width:120px;height:120px;transform-style:preserve-3d}
+.obj i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:6rem}
+.bg3{position:fixed;inset:0;z-index:0;pointer-events:none;perspective:800px;overflow:hidden}
+.bi{position:absolute;font-size:2.4rem;opacity:.3;will-change:transform}.bi>span{display:block;animation:fl 8s ease-in-out infinite}
+.cube{width:50px;height:50px;transform-style:preserve-3d;animation:cs 16s linear infinite}.cube s{position:absolute;inset:0;background:#9fe8ff55;border:1px solid #fff9}
+@keyframes cs{to{transform:rotateX(360deg) rotateY(360deg)}}
+#app>section,#app>header,#app>footer,#app>.mq{position:relative;z-index:1}
+.lite .bi:nth-child(n+4){display:none}.pz *{animation-play-state:paused!important}
+
+@keyframes sy{to{transform:rotateY(360deg)}}
+.pop,.em{animation:fl 6s ease-in-out infinite,sy 9s linear infinite}
+.bi>span{animation:fl 8s ease-in-out infinite,sy 10s linear infinite}
+.hero h1{background:linear-gradient(90deg,var(--pink),var(--sun),var(--pink));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 5s linear infinite}
+@keyframes sh{to{background-position:200% 0}}
+.ring3d{position:absolute;left:50%;bottom:36px;z-index:1;perspective:700px;pointer-events:none;--r:170px;opacity:.85}
+.ring{position:relative;width:0;height:0;transform-style:preserve-3d;animation:rg 14s linear infinite}
+.ring b{position:absolute;left:-28px;top:-28px;font-size:3rem;transform:rotateY(calc(var(--i)*45deg)) translateZ(var(--r))}
+@keyframes rg{from{transform:rotateX(-14deg) rotateY(0)}to{transform:rotateX(-14deg) rotateY(360deg)}}
+@media(max-width:600px){.ring3d{--r:100px}.ring b{font-size:2rem;left:-20px;top:-20px}}
+.mq{overflow:hidden;background:var(--pink);color:#fff;font:800 1.2rem "Trebuchet MS",sans-serif;white-space:nowrap;padding:.7rem 0;transform:rotate(-1.2deg);margin:1.2rem -2%}
+.mqi{display:inline-block;animation:mq 28s linear infinite}.mq:hover .mqi{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.card{animation:pop .5s backwards;animation-delay:calc(var(--d,0)*60ms)}
+@keyframes pop{from{opacity:0;transform:perspective(600px) rotateX(-25deg) translateY(30px)}}
+.card .pic{animation:wb 5s ease-in-out infinite}
+@keyframes wb{0%,100%{transform:perspective(500px) rotateY(-12deg) rotateX(4deg)}50%{transform:perspective(500px) rotateY(12deg) rotateX(-4deg)}}
+#pg{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--pink),var(--sun),var(--mint));z-index:70}
+#cb{position:relative}#cb.pul::after{content:"";position:absolute;inset:0;border-radius:999px;pointer-events:none;animation:pulb 1.6s infinite}
+@keyframes pulb{0%{box-shadow:0 0 0 0 #ff3d8b99}100%{box-shadow:0 0 0 14px #ff3d8b00}}
+#sq{margin-right:.5rem}
+
+.ring{animation:none!important}#hero{touch-action:pan-y}
+.bub{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.bb{position:absolute;bottom:-70px;width:56px;height:56px;padding:0;border-radius:50%;font-size:1.6rem;background:radial-gradient(circle at 30% 30%,#fffb,#ff3d8b22);border:2px solid #fff9;pointer-events:auto;z-index:3;animation:rise 11s linear forwards;box-shadow:0 6px 16px #0002}
+@keyframes rise{to{translate:0 -115vh}}
+.score{position:absolute;top:80px;right:14px;z-index:3;background:var(--card);padding:.4rem .9rem;border-radius:99px;font-weight:700;font-size:.85rem;box-shadow:0 4px 12px #0002}
+.hint{position:absolute;bottom:6px;width:100%;text-align:center;font-size:.8rem;color:var(--mut);z-index:2;margin:0}
+.cur{position:fixed;left:0;top:0;z-index:75;font-size:1.8rem;pointer-events:none;opacity:0;transition:opacity .3s}
+.card{overflow:hidden}.card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,#fff7 50%,transparent 60%);transform:translateX(-130%);transition:transform .7s;pointer-events:none}.card:hover::after{transform:translateX(130%)}
+.rv{transform:perspective(800px) rotateX(14deg) translateY(30px);transform-origin:top}.rv.on{transform:none}
+.mq{transition:transform .25s}.row{animation:sl .3s}
+
+#ld{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;perspective:600px;transition:opacity .5s}#ld.out{opacity:0;pointer-events:none}#ld div{font-size:5rem;animation:sy 1s linear infinite}
+nav{transition:transform .3s}nav.hd{transform:translateY(-110%)}
+.wave{position:absolute;left:0;bottom:-1px;width:200%;height:60px;z-index:1;pointer-events:none;animation:wv 9s linear infinite}
+@keyframes wv{to{transform:translateX(-50%)}}
+.seal{position:absolute;left:14px;top:90px;width:92px;color:var(--pink);z-index:2;pointer-events:none}.spn{transform-origin:50px 50px;animation:spz 14s linear infinite}
+@keyframes spz{to{transform:rotate(360deg)}}
+.dr{position:absolute;top:-20px;width:8px;height:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;opacity:.55;z-index:1;animation:fall linear infinite}
+@keyframes fall{to{translate:0 105vh}}
+.tw{font-weight:700;color:var(--ink)}.tw b{color:var(--pink)}.cr{animation:bl .8s steps(1) infinite}@keyframes bl{50%{opacity:0}}
+section h2::after{content:"";display:block;height:5px;width:0;margin-top:.4rem;border-radius:9px;background:linear-gradient(90deg,var(--pink),var(--sun));transition:width .8s .3s}.rv.on h2::after{width:90px}
+.pin{display:inline-block;animation:bn 1.2s ease-in-out infinite}@keyframes bn{50%{transform:translateY(-6px)}}
+.rt{display:inline-block;animation:rk 2.4s ease-in-out infinite}@keyframes rk{0%,60%,100%{transform:rotate(0)}65%{transform:rotate(-18deg)}75%{transform:rotate(16deg)}85%{transform:rotate(-12deg)}}
+.chips button:hover{transform:translateY(-3px) rotate(-2deg)}
+@media(max-width:480px){.seal{display:none}}
+@media(prefers-reduced-motion:reduce){.wave,.spn,.dr,.pin,.rt{animation:none}}
+</style></head><body>
+<div class="bg3" id="bg3" aria-hidden="true"></div>
+<div id="ld"><div>🍦</div></div>
+<div id="pg"></div>
+<div id="app">
+<nav><b id="lg" style="cursor:pointer" onclick="spinLogo()">🍦 La Michoacana</b><div class="r"><button class="b2" onclick="openTrack()">Mi pedido</button><button class="b1" id="cb" onclick="cart(1)">🛒 <span id="cn">0</span></button></div></nav>
+
+<header class="hero" id="hero"><div class="scene"><div class="layer" id="ly" data-z="1">
+<div class="pop" style="left:8%;top:18%;background:linear-gradient(#ff6aa8,#ff3d8b)"></div>
+<div class="pop" style="right:10%;top:12%;background:linear-gradient(#ffd45e,#ffb627);animation-delay:-2s"></div>
+<div class="pop" style="left:20%;bottom:20%;background:linear-gradient(#5eead4,#19c8a6);animation-delay:-4s"></div>
+<div class="em" style="right:18%;bottom:18%">🍓</div><div class="em" style="left:46%;top:6%;animation-delay:-3s">🥭</div><div class="em" style="left:4%;top:55%;animation-delay:-1s">🍨</div><div class="em" style="right:4%;top:50%;animation-delay:-5s">🧊</div>
+</div></div>
+<div class="in"><h1>La Michoacana</h1><p>Paletas, nieves y aguas frescas hechas con fruta de verdad. Pide desde tu celular y recoge sin filas. · Puebla</p><p class="tw">Hoy se antoja: <b id="tw"></b><span class="cr">|</span></p>
+<button class="b1" onclick="go('prod')">Ver productos</button> <a class="b2" id="how" target="_blank" rel="noopener">Cómo llegar</a></div><svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40Q180 0 360 40T720 40T1080 40T1440 40V80H0Z" fill="var(--bg)"/></svg><svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="cp" d="M50,50m-38,0a38,38 0 1,1 76,0a38,38 0 1,1-76,0"/></defs><g class="spn"><text font-size="10" font-weight="700" fill="currentColor"><textPath href="#cp">PIDE EN LÍNEA • PUEBLA • PIDE EN LÍNEA • </textPath></text></g><text x="50" y="60" text-anchor="middle" font-size="28">🍦</text></svg><div class="bub" id="bub"></div><div class="score" id="sc">🫧 Burbujas reventadas: 0</div><p class="hint">👆 Arrastra para girar el aro · revienta las burbujas</p><div class="ring3d" aria-hidden="true"><div class="ring"><b style="--i:0">🍓</b><b style="--i:1">🍦</b><b style="--i:2">🥭</b><b style="--i:3">🧊</b><b style="--i:4">🍋</b><b style="--i:5">🍉</b><b style="--i:6">🥥</b><b style="--i:7">🍫</b></div></div></header>
+
+<div class="mq" aria-hidden="true"><div class="mqi"></div></div>
+
+<section id="prod" class="rv"><h2>Nuestros productos</h2><input id="sq" placeholder="🔍 Buscar paleta, nieve, agua..." aria-label="Buscar" oninput="q=this.value.toLowerCase();menu()"><button class="b1" onclick="surprise()">🎲 Sorpréndeme</button><div class="chips" id="chips"></div><div class="grid" id="grid"></div></section>
+
+<section id="info" class="rv"><h2>Visítanos</h2>
+<div class="oc"><p><span class="pin">📍</span> <span id="addr"></span></p><p>🕘 <span id="hrs"></span></p><p><span class="rt">📞</span> <a href="tel:+522211663713" style="color:var(--pink);font-weight:700">221 166 3713</a></p>
+<a class="b2" id="how2" target="_blank" rel="noopener">Abrir en mapas</a> <a class="b2" id="tel">Llamar</a> <a class="b2" id="wa" target="_blank" rel="noopener">WhatsApp</a></div></section>
+
+<footer>© La Michoacana · <a onclick="legal('priv')">Aviso de privacidad</a> · <a onclick="legal('terms')">Términos y condiciones</a> · <a onclick="legal('ref')">Cancelaciones</a> · <a onclick="adm()">Acceso dueño</a></footer>
+</div>
+
+<div class="fab"><a id="fw" style="background:#25d366" target="_blank" rel="noopener">💬</a><a id="ft" style="background:var(--pink)">📞</a><a id="fm" style="background:var(--sun)" target="_blank" rel="noopener">📍</a></div>
+
+<div class="drawer" id="dr" onclick="if(event.target===this)cart(0)"><div class="panel"><h2>Tu carrito</h2><div id="ci"></div><h3 id="tt" style="margin:1rem 0"></h3><button class="b1" id="ck" onclick="checkout()">Hacer pedido</button> <button class="b2" onclick="cart(0)">Seguir comprando</button></div></div>
+<div class="modal" id="md" onclick="if(event.target===this)this.classList.remove('on')"><div class="panel" id="mp"></div></div>
+
+<script>
+// ===== CONFIGURACIÓN: el dueño debe llenar estos datos (no se inventan) =====
+const CFG={nombre:"La Michoacana",tel:"+522211663713",whatsapp:"522211663713",direccion:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue.",horario:"[Horario pendiente de proporcionar]",adminPass:"demo1234",mapsQuery:"Calz. Ignacio Zaragoza 270, Los Pinos, 72240 Heroica Puebla de Zaragoza, Pue."};
+const ST=["Recibido","Confirmado","Preparando","Listo","Entregado"];
+const COL=["#ffd6e7","#d3f6ee","#fff0c7","#e5dcff"];
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const mx=n=>"$"+Number(n).toFixed(2);
+const seed={cats:["Paletas","Nieves","Aguas frescas","Malteadas"],prods:[{id:1,n:"Paleta de fresa",c:"Paletas",p:18,e:"🍓",d:"De agua con fresa natural",x:"Paleta helada de agua con fresa molida. Ligera, dulce y muy refrescante.",i:"Fresa, agua, azúcar",al:"Ninguno conocido",a:true},
+{id:2,n:"Paleta de mango",c:"Paletas",p:18,e:"🥭",d:"Mango con chile opcional",x:"Paleta de mango maduro; puedes pedirla con chile en polvo para un toque picosito.",i:"Mango, agua, azúcar, chile (opcional)",al:"Ninguno conocido",a:false},
+{id:3,n:"Paleta de queso",c:"Paletas",p:22,e:"🧀",d:"Cremosa, clásica de Michoacán",x:"Paleta cremosa de leche con sabor a queso, un clásico de las paleterías michoacanas.",i:"Leche, queso, azúcar",al:"Leche (lácteos)",a:true},
+{id:4,n:"Nieve de limón",c:"Nieves",p:35,e:"🍋",d:"Una bola, refrescante",x:"Nieve de agua con limón y su ralladura: ácida, fría y muy ligera.",i:"Limón, agua, azúcar",al:"Ninguno conocido",a:true},
+{id:5,n:"Nieve de vainilla",c:"Nieves",p:35,e:"🍨",d:"Una bola, cremosa",x:"Nieve cremosa con sabor suave a vainilla, ideal para acompañar cualquier postre.",i:"Leche, crema, azúcar, vainilla",al:"Leche (lácteos)",a:true},
+{id:6,n:"Agua de horchata",c:"Aguas frescas",p:30,e:"🥛",d:"Vaso grande",x:"Bebida fría de arroz con canela, dulce y cremosa, servida con hielo.",i:"Arroz, canela, azúcar, agua",al:"Puede contener trazas de leche",a:true},
+{id:7,n:"Malteada de chocolate",c:"Malteadas",p:55,e:"🍫",d:"Espesa y con crema",x:"Malteada espesa de helado y chocolate, coronada con crema batida.",i:"Helado, leche, chocolate, crema",al:"Leche, posibles trazas de nueces",a:true}],orders:[],next:1,mine:[],log:[],fav:[]};
+let S;try{S=JSON.parse(localStorage.getItem("lm2"))||seed}catch(e){S=seed}
+let C=[],cat="Todas";
+function save(){try{localStorage.setItem("lm2",JSON.stringify(S))}catch(e){}}
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2200)}
+function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+// contacto
+const mapU="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(CFG.mapsQuery);
+["how","how2","fm"].forEach(i=>$("#"+i).href=mapU);
+$("#addr").textContent=CFG.direccion;$("#hrs").textContent=CFG.horario;
+const tl=CFG.tel?"tel:"+CFG.tel:"#",wl=CFG.whatsapp?"https://wa.me/"+CFG.whatsapp.replace(/\D/g,""):"#";
+["tel","ft"].forEach(i=>$("#"+i).href=tl);["wa","fw"].forEach(i=>$("#"+i).href=wl);
+[$("#tel"),$("#wa"),$("#ft"),$("#fw")].forEach(a=>{if(a.getAttribute("href")==="#")a.onclick=e=>{e.preventDefault();toast("El dueño aún no configura este número")}});
+// menu
+function menu(){const cs=["Todas","❤ Favoritos",...S.cats],F=S.fav||[];
+$("#chips").innerHTML=cs.map(c=>`<button class="${c===cat?"a":""}" onclick="cat='${esc(c)}';menu()">${esc(c)}</button>`).join("");
+const L=S.prods.filter(p=>p.on!==false&&(cat==="Todas"||(cat[0]==="❤"?F.includes(p.id):p.c===cat))&&(p.n+" "+p.d).toLowerCase().includes(q));
+$("#grid").innerHTML=L.map((p,i)=>`<div class="card ${p.a?"":"off"}" style="--d:${i}" onclick="openP(${p.id})"><button class="fv" aria-label="Favorito" onclick="event.stopPropagation();fav(${p.id})">${F.includes(p.id)?"❤️":"🤍"}</button><div class="pic" style="background:${COL[i%4]}">${esc(p.e||"🍦")}</div><h3>${esc(p.n)}</h3><p>${esc(p.d)}</p><div style="display:flex;justify-content:space-between;align-items:center"><span class="price">${mx(p.p)}</span><span class="tag ${p.a?"ok":"no"}">${p.a?"Disponible":"Agotado"}</span></div><button class="b1" style="width:100%;margin-top:.6rem" ${p.a?"":"disabled"} onclick="event.stopPropagation();add(${p.id},1,this)">${p.a?"Agregar":"Agotado"}</button></div>`).join("")||"<p>Sin resultados.</p>"}
+function add(id,n=1,el){const p=S.prods.find(x=>x.id===id);if(!p||!p.a)return;const l=C.find(x=>x.id===id);l?l.q+=n:C.push({id,q:n});if(el)fly(el,p.e||"🍦");rc();$("#cb").classList.remove("bump");void $("#cb").offsetWidth;$("#cb").classList.add("bump");toast(n+"× "+p.n+" agregado")}
+function rc(){$("#cb").classList.toggle("pul",C.length>0);$("#cn").textContent=C.reduce((a,b)=>a+b.q,0);
+C=C.filter(l=>{const p=S.prods.find(x=>x.id===l.id);return p&&p.a});
+$("#ci").innerHTML=C.map(l=>{const p=S.prods.find(x=>x.id===l.id);return`<div class="row"><span style="font-size:2rem">${esc(p.e||"🍦")}</span><div class="g"><b>${esc(p.n)}</b><br>${mx(p.p)} · sub ${mx(p.p*l.q)}</div><div class="q"><button onclick="qt(${l.id},-1)">−</button> ${l.q} <button onclick="qt(${l.id},1)">+</button> <button onclick="qt(${l.id},-99)">🗑</button></div></div>`}).join("")||"<p>Aún no hay productos.</p>";
+$("#tt").textContent="Total: "+mx(tot());$("#ck").disabled=!C.length}
+const tot=()=>C.reduce((a,l)=>a+l.q*S.prods.find(x=>x.id===l.id).p,0);
+function qt(id,d){const l=C.find(x=>x.id===id);l.q+=d;if(l.q<1)C=C.filter(x=>x!==l);rc()}
+function cart(o){$("#dr").classList.toggle("on",!!o);rc()}
+// checkout
+function checkout(){cart(0);const m=$("#md");m.classList.add("on");$("#mp").innerHTML=`<h2>Tu pedido</h2><p>Total: <b>${mx(tot())}</b></p>
+<label>Nombre<input id="f1" maxlength="60" autocomplete="name"></label><label>Teléfono (10 dígitos)<input id="f2" inputmode="tel" maxlength="14" autocomplete="tel"></label>
+<label>Entrega<select id="f3"><option>Recoger en tienda</option><option>A domicilio</option></select></label>
+<label>Dirección (solo si es a domicilio)<input id="f4" maxlength="120"></label><label>Notas<textarea id="f5" maxlength="200"></textarea></label>
+<label>Pago<select id="f6"><option value="online">Tarjeta en línea (simulado)</option><option value="cash">Efectivo al recibir</option></select></label>
+<p class="note">Al continuar aceptas el <a onclick="legal('priv')" style="color:var(--pink)">Aviso de privacidad</a>. Los datos de tarjeta nunca se guardan en esta app: el pago real lo procesará el proveedor elegido (Stripe, Mercado Pago, etc.).</p>
+<p id="er" style="color:#e0364a"></p><button class="b1" onclick="place()">Confirmar y pagar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cancelar</button>`}
+function place(){const n=$("#f1").value.trim(),t=$("#f2").value.replace(/\D/g,""),dl=$("#f3").value==="A domicilio";
+if(n.length<2)return $("#er").textContent="Escribe tu nombre.";if(t.length<10)return $("#er").textContent="Teléfono de 10 dígitos.";if(dl&&$("#f4").value.trim().length<5)return $("#er").textContent="Falta la dirección de entrega.";
+if(C.some(l=>!S.prods.find(x=>x.id===l.id).a))return $("#er").textContent="Un producto se agotó.";
+const online=$("#f6").value==="online";
+const o={id:S.next++,n,t,dl,addr:$("#f4").value.trim(),note:$("#f5").value.trim(),items:C.map(l=>{const p=S.prods.find(x=>x.id===l.id);return{n:p.n,q:l.q,p:p.p}}),total:tot(),pay:online?"Tarjeta":"Efectivo",paid:false,st:0,at:new Date().toISOString()};
+const fin=()=>{burst(innerWidth/2,innerHeight/2,26);S.orders.push(o);S.mine.push(o.id);save();C=[];rc();$("#md").classList.remove("on");openTrack();toast("Pedido #"+pad(o.id)+" recibido")};
+if(online){$("#mp").innerHTML=`<h2>Pago seguro</h2><p>Simulación: aquí se abriría el formulario del proveedor de pagos (los datos de tarjeta nunca pasan por esta app).</p><p><b>${mx(o.total)}</b></p><button class="b1" onclick="pay(1)">Simular pago aprobado</button> <button class="b2" onclick="pay(0)">Simular pago rechazado</button><p id="pe" style="color:#e0364a"></p>`;
+window.pay=ok=>{if(ok){o.paid=true;fin()}else $("#pe").textContent="Pago rechazado. Intenta con otro método."}}else fin()}
+const pad=n=>String(n).padStart(3,"0");
+// seguimiento
+function openTrack(){$("#md").classList.add("on");trk();}
+function trk(){if(!$("#md").classList.contains("on")||!$("#mp").dataset.t&&false)return;
+const os=S.orders.filter(o=>S.mine.includes(o.id)).reverse();
+$("#mp").dataset.t=1;$("#mp").innerHTML=`<h2>Mis pedidos</h2>`+(os.map(o=>`<div class="oc"><b>Pedido #${pad(o.id)}</b> · ${mx(o.total)} · ${o.paid?"Pagado":"Pago pendiente"}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))}</span><br><a class="b2" target="_blank" rel="noopener" href="${wam(o)}" style="margin-top:.5rem">📲 Enviar por WhatsApp</a>
+${o.st<0?`<p class="no tag">Cancelado</p>`:`<div class="tl">${ST.map((s,i)=>`<div class="s ${i<o.st?"done":i===o.st?"cur":""}"><div class="d">${i<o.st?"✓":""}</div>${o.dl&&s==="Listo"?"En camino":s}</div>`).join("")}</div><b>Estado: ${o.dl&&o.st===3?"En camino":ST[o.st]}</b>`}</div>`).join("")||"<p>Aún no tienes pedidos en este dispositivo.</p>")+`<button class="b2" onclick="$('#md').classList.remove('on');delete $('#mp').dataset.t">Cerrar</button>`}
+setInterval(()=>{try{const n=JSON.parse(localStorage.getItem("lm2"));if(n&&JSON.stringify(n)!==JSON.stringify(S)){const on=$("#md").classList.contains("on")&&$("#mp").dataset.t;const prev=S;S=n;menu();rc();if(on)trk();n.orders.forEach(o=>{const p=prev.orders.find(x=>x.id===o.id);if(p&&p.st!==o.st&&S.mine.includes(o.id))toast(`Tu pedido #${pad(o.id)}: ${ST[o.st]||"Cancelado"}`)})}}catch(e){}},2000);
+// legal
+function legal(k){const T={priv:["Aviso de privacidad","Borrador base. Responsable: [nombre/razón social del dueño]. Datos que se recaban: nombre, teléfono y, si aplica, dirección de entrega, solo para gestionar tu pedido. No se almacenan datos de tarjeta. Tienes derechos ARCO (acceso, rectificación, cancelación y oposición) conforme a la LFPDPPP; para ejercerlos escribe a [correo del dueño]."],terms:["Términos y condiciones","Borrador base. Los precios están en pesos mexicanos. La disponibilidad puede cambiar sin previo aviso. El pedido se confirma cuando el negocio lo acepta."],ref:["Cancelaciones y reembolsos","Borrador base. Puedes cancelar mientras el pedido esté en estado Recibido o Confirmado. Los reembolsos se hacen al mismo medio de pago. [El dueño debe definir plazos]."]}[k];
+$("#md").classList.add("on");delete $("#mp").dataset.t;$("#mp").innerHTML=`<h2>${T[0]}</h2><p>${T[1]}</p><p class="note">Texto de ejemplo: debe ser revisado y adaptado por el dueño y, de ser necesario, por un profesional legal.</p><button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button>`}
+// admin (DEMO: la autenticación real debe hacerse en servidor)
+function adm(){delete $("#mp").dataset.t;$("#md").classList.add("on");$("#mp").innerHTML=`<h2>Acceso del dueño</h2><input id="ap" type="password" placeholder="Contraseña (demo: demo1234)"><button class="b1" onclick="if($('#ap').value===CFG.adminPass)panel();else toast('Contraseña incorrecta')">Entrar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button><p class="note">Demo: la contraseña vive en el navegador y NO es segura. En producción el login se valida en el servidor.</p>`}
+function panel(){const m=$("#mp");m.style.width="min(760px,100%)";
+m.innerHTML=`<h2>Panel del dueño</h2><h3>Pedidos</h3>`+(S.orders.slice().reverse().map(o=>`<div class="oc"><b>#${pad(o.id)}</b> ${esc(o.n)} · ${esc(o.t)} · ${mx(o.total)} · ${o.pay} ${o.paid?"(pagado)":""}<br><span class="note">${esc(o.items.map(i=>i.q+"× "+i.n).join(", "))} · ${o.dl?"Domicilio: "+esc(o.addr):"Recoger"} · ${new Date(o.at).toLocaleTimeString("es-MX")}${o.note?" · "+esc(o.note):""}</span><br><b>${o.st<0?"Cancelado":ST[o.st]}</b> ${o.st>=0&&o.st<4?`<button class="b1" onclick="ns(${o.id},1)">→ ${ST[o.st+1]}</button> <button class="b2" onclick="if(confirm('¿Cancelar pedido?'))ns(${o.id},-9)">Cancelar</button>`:""}</div>`).join("")||"<p>Sin pedidos.</p>")+
+`<h3>Productos</h3>`+S.prods.map(p=>`<div class="row"><div class="g"><b>${esc(p.n)}</b> <span class="tag ${p.a?"ok":"no"}">${p.a?"Disponible":"Agotado"}</span></div><input style="width:80px;margin:0" type="number" min="0" value="${p.p}" onchange="pe(${p.id},this.value)"><button class="b2" onclick="ep(${p.id})">✏️</button><button class="b2" onclick="ta(${p.id})">${p.a?"Agotar":"Activar"}</button><button class="b2" onclick="if(confirm('¿Eliminar?'))dp(${p.id})">🗑</button></div>`).join("")+
+`<h3 style="margin-top:1rem">Nuevo producto</h3><input id="n1" placeholder="Nombre"><input id="n2" placeholder="Descripción"><input id="n3" type="number" placeholder="Precio"><select id="n4">${S.cats.map(c=>`<option>${esc(c)}</option>`).join("")}</select><input id="n5" placeholder="Nueva categoría (opcional)"><button class="b1" onclick="np()">Agregar</button> <button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button>`}
+function lg(a){S.log.push(new Date().toISOString()+" "+a)}
+function ns(id,d){const o=S.orders.find(x=>x.id===id);o.st=d<0?-1:o.st+d;lg("pedido "+id+" -> "+o.st);save();panel()}
+function ta(id){const p=S.prods.find(x=>x.id===id);p.a=!p.a;lg("disp "+id);save();menu();rc();panel()}
+function pe(id,v){S.prods.find(x=>x.id===id).p=Math.max(0,+v||0);lg("precio "+id);save();menu();rc()}
+function dp(id){S.prods=S.prods.filter(x=>x.id!==id);lg("borrado "+id);save();menu();rc();panel()}
+function np(){const n=$("#n1").value.trim(),p=+$("#n3").value;if(!n||!(p>=0)||$("#n3").value==="")return toast("Nombre y precio válidos");const nc=$("#n5").value.trim();if(nc&&!S.cats.includes(nc))S.cats.push(nc);
+S.prods.push({id:Date.now(),n,d:$("#n2").value.trim(),p,c:nc||$("#n4").value,e:"🍦",a:true});lg("alta "+n);save();menu();panel()}
+// efectos
+const ly=$("#ly"),lite=(navigator.hardwareConcurrency||4)<=4||matchMedia("(prefers-reduced-motion:reduce)").matches||matchMedia("(pointer:coarse)").matches;
+if(lite)document.body.classList.add("lite");else $("#hero").addEventListener("mousemove",e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;ly.style.transform=`rotateY(${x*14}deg) rotateX(${-y*14}deg) translate(${x*20}px,${y*20}px)`});
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("on")),{threshold:.1});document.querySelectorAll(".rv").forEach(e=>io.observe(e));
+
+// ===== v2: interacción y 3D constante =====
+let q="";const rm=matchMedia("(prefers-reduced-motion:reduce)").matches;let raf=0,drag=0;
+function fav(id){S.fav=S.fav||[];const i=S.fav.indexOf(id);i<0?S.fav.push(id):S.fav.splice(i,1);save();menu()}
+function fly(from,e){if(rm)return;const a=from.getBoundingClientRect(),b=$("#cb").getBoundingClientRect(),s=document.createElement("div");s.textContent=e;s.style.cssText=`position:fixed;z-index:70;font-size:2rem;left:${a.left+a.width/2}px;top:${a.top}px;pointer-events:none`;document.body.append(s);s.animate([{transform:"translate(0,0) scale(1)"},{transform:`translate(${b.left-a.left}px,${b.top-a.top}px) scale(.3) rotate(360deg)`,opacity:.4}],{duration:700,easing:"ease-in"}).onfinish=()=>s.remove()}
+function openP(id){const p=S.prods.find(x=>x.id===id);if(!p)return;delete $("#mp").dataset.t;$("#mp").style.width="";$("#md").classList.add("on");
+const rel=S.prods.filter(x=>x.c===p.c&&x.id!==id&&x.on!==false).slice(0,3);
+$("#mp").innerHTML=`<div class="stage" id="stg"><div class="obj" id="ob">${[-14,-10,-6,-2,2,6,10,14].map(z=>`<i style="transform:translateZ(${z}px)">${esc(p.e||"🍦")}</i>`).join("")}</div></div><p class="note" style="text-align:center">Arrastra para girarlo</p>
+<h2>${esc(p.n)}</h2><p><span class="price">${mx(p.p)}</span> <span class="tag ${p.a?"ok":"no"}">${p.a?"Disponible":"Agotado"}</span></p>
+<p>${esc(p.x||p.d)}</p><p><b>Ingredientes:</b> ${esc(p.i||"Por confirmar")}</p><p><b>Alérgenos:</b> ${esc(p.al||"Por confirmar")}</p>
+<div class="row"><div class="q"><button onclick="pq(-1)">−</button> <b id="pq">1</b> <button onclick="pq(1)">+</button></div><button class="b1" id="pa" ${p.a?"":"disabled"} onclick="add(${id},+$('#pq').textContent,this)">${p.a?"Agregar al carrito":"Agotado"}</button></div>
+${rel.length?`<h3>También te puede gustar</h3><div class="chips">${rel.map(r=>`<button onclick="openP(${r.id})">${esc(r.e||"🍦")} ${esc(r.n)}</button>`).join("")}</div>`:""}
+<button class="b2" onclick="$('#md').classList.remove('on')">Cerrar</button>`;view3d()}
+function pq(d){const e=$("#pq");e.textContent=Math.min(20,Math.max(1,+e.textContent+d))}
+function view3d(){cancelAnimationFrame(raf);const ob=$("#ob"),st=$("#stg");if(!ob)return;let ry=-20,rx=-10,x0=0,y0=0;
+st.onpointerdown=e=>{drag=1;x0=e.clientX;y0=e.clientY;st.setPointerCapture(e.pointerId)};
+st.onpointermove=e=>{if(!drag)return;ry+=(e.clientX-x0)*.8;rx=Math.max(-60,Math.min(60,rx-(e.clientY-y0)*.5));x0=e.clientX;y0=e.clientY};
+st.onpointerup=st.onpointercancel=()=>drag=0;
+(function loop(){if(!$("#md").classList.contains("on")||!document.body.contains(ob))return;if(!drag&&!rm)ry+=.7;ob.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;raf=requestAnimationFrame(loop)})()}
+function ep(id){const p=S.prods.find(x=>x.id===id);$("#mp").innerHTML=`<h2>Editar ${esc(p.n)}</h2><label>Nombre<input id="e1" value="${esc(p.n)}"></label><label>Emoji<input id="e2" value="${esc(p.e||"")}"></label><label>Descripción corta<input id="e3" value="${esc(p.d||"")}"></label><label>Explicación<textarea id="e4">${esc(p.x||"")}</textarea></label><label>Ingredientes<input id="e5" value="${esc(p.i||"")}"></label><label>Alérgenos<input id="e6" value="${esc(p.al||"")}"></label><button class="b1" onclick="se(${id})">Guardar</button> <button class="b2" onclick="panel()">Volver</button>`}
+function se(id){const p=S.prods.find(x=>x.id===id),v=[1,2,3,4,5,6].map(k=>$("#e"+k).value.trim());if(!v[0])return toast("Nombre requerido");[p.n,p.e,p.d,p.x,p.i,p.al]=v;lg("editado "+id);save();menu();panel()}
+// fondo 3D constante + parallax por scroll
+const IT=[["🍓",6,12],["🧊",88,30],["🍋",12,55],["🥭",80,70],["🍨",30,85],["🍉",60,8],["🍦",48,40],["🥥",92,88],["🍒",3,80],["🧊",40,62]],FC=["rotateY(0)","rotateY(90deg)","rotateY(180deg)","rotateY(-90deg)","rotateX(90deg)","rotateX(-90deg)"];
+$("#bg3").innerHTML=IT.map((t,i)=>`<div class="bi" data-s="${(i%3+1)*.04}" style="left:${t[1]}%;top:${t[2]}%"><span style="animation-delay:-${i*1.3}s">${t[0]}</span></div>`).join("")+`<div class="bi" data-s=".07" style="left:72%;top:42%"><div class="cube">${FC.map(f=>`<s style="transform:${f} translateZ(25px)"></s>`).join("")}</div></div>`;
+if(!lite&&!rm){let tk=0;addEventListener("scroll",()=>{if(tk)return;tk=1;requestAnimationFrame(()=>{tk=0;const y=scrollY;document.querySelectorAll(".bi").forEach(b=>b.style.transform=`translateY(${-y*b.dataset.s}px) rotate(${y*.05}deg)`)})},{passive:true})}
+// inclinación 3D de tarjetas (mouse y toque)
+const gr=$("#grid"),tilt=e=>{const c=e.target.closest(".card");if(!c||rm)return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(700px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateY(-4px)`},un=e=>{const c=e.target.closest(".card");if(c)c.style.transform=""};
+["pointermove","pointerdown"].forEach(t=>gr.addEventListener(t,tilt));["pointerout","pointerup","pointercancel"].forEach(t=>gr.addEventListener(t,un));
+// giroscopio en celular (hero)
+if(matchMedia("(pointer:coarse)").matches&&!rm&&window.DeviceOrientationEvent)addEventListener("deviceorientation",e=>{if(e.gamma==null)return;const c=(v,m)=>Math.max(-m,Math.min(m,v));ly.style.transform=`rotateY(${c(e.gamma,25)*.6}deg) rotateX(${c((e.beta||45)-45,25)*-.4}deg)`});
+document.addEventListener("visibilitychange",()=>document.body.classList.toggle("pz",document.hidden));
+
+// ===== v3: más movimiento e interacciones =====
+const EM=["🍓","🍦","✨","🥭","🍋","💖","🍉"];
+function burst(x,y,n=7){if(rm)return;for(let i=0;i<n;i++){const s=document.createElement("div");s.textContent=EM[i%EM.length];s.style.cssText=`position:fixed;left:${x}px;top:${y}px;z-index:80;font-size:${14+Math.random()*16}px;pointer-events:none`;document.body.append(s);const a=Math.random()*6.28,d=40+Math.random()*80;s.animate([{transform:"translate(-50%,-50%) scale(.4)",opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d+30}px) rotate(${Math.random()*360}deg) scale(1)`,opacity:0}],{duration:700+Math.random()*400,easing:"ease-out"}).onfinish=()=>s.remove()}}
+document.addEventListener("click",e=>burst(e.clientX,e.clientY,6));
+if(!lite&&!rm){let lt=0;document.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"||Date.now()-lt<70)return;lt=Date.now();const s=document.createElement("div");s.textContent="✨";s.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:80;font-size:14px;pointer-events:none`;document.body.append(s);s.animate([{opacity:.9,transform:"translateY(0) scale(1)"},{opacity:0,transform:"translateY(18px) scale(.3)"}],{duration:700}).onfinish=()=>s.remove()})}
+document.addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"||rm||!e.target.closest)return;const b=e.target.closest(".b1:not(:disabled)");if(!b)return;const r=b.getBoundingClientRect();b.style.translate=`${(e.clientX-r.left-r.width/2)*.18}px ${(e.clientY-r.top-r.height/2)*.28}px`});
+document.addEventListener("pointerout",e=>{const b=e.target.closest&&e.target.closest(".b1");if(b)b.style.translate=""});
+addEventListener("scroll",()=>{$("#pg").style.width=(scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)*100)+"%"},{passive:true});
+function surprise(){const L=S.prods.filter(p=>p.a&&p.on!==false);if(!L.length)return toast("No hay productos disponibles");const p=L[Math.floor(Math.random()*L.length)];toast("🎲 ¡Te toca: "+p.n+"!");burst(innerWidth/2,innerHeight/2,16);setTimeout(()=>openP(p.id),500)}
+addEventListener("keydown",e=>{if(e.key==="Escape"){$("#md").classList.remove("on");cart(0)}});
+const MQ=["🍓 FRESA","🥭 MANGO","🍋 LIMÓN","🥥 COCO","🍫 CHOCOLATE","🍉 SANDÍA","🧀 QUESO","🥛 HORCHATA"].join("  ✦  ")+"  ✦  ";$(".mqi").textContent=MQ+MQ;
+const wam=o=>"https://wa.me/"+CFG.whatsapp+"?text="+encodeURIComponent(`Hola, soy ${o.n}. Mi pedido #${pad(o.id)}: ${o.items.map(i=>i.q+"x "+i.n).join(", ")}. Total ${mx(o.total)}. ${o.dl?"A domicilio: "+o.addr:"Paso a recoger"}.`);
+
+// ===== v4: aro arrastrable, burbujas, cursor, extras =====
+const hero=$("#hero"),ring=$(".ring"),sc=$("#sc"),bub=$("#bub");let ang=0,vel=rm?0:.4,dg=0,lx=0,hv=true,score=0;
+new IntersectionObserver(es=>hv=es[0].isIntersecting).observe(hero);
+hero.addEventListener("pointerdown",e=>{if(e.target.closest("button,a"))return;dg=1;lx=e.clientX});
+addEventListener("pointermove",e=>{if(!dg)return;vel=(e.clientX-lx)*.35;lx=e.clientX;ang+=vel});
+addEventListener("pointerup",()=>dg=0);
+(function rl(){if(hv&&!document.hidden){if(!dg){vel+=((rm?0:.4)-vel)*.02;ang+=vel}ring.style.transform=`rotateX(-14deg) rotateY(${ang}deg)`}requestAnimationFrame(rl)})();
+function spawn(){if(!hv||document.hidden||bub.children.length>=(lite?3:6))return;const b=document.createElement("button");b.className="bb";b.setAttribute("aria-label","Burbuja");b.textContent=EM[Math.floor(Math.random()*EM.length)];b.style.left=(5+Math.random()*88)+"%";b.style.animationDuration=(9+Math.random()*6)+"s";b.onanimationend=()=>b.remove();
+b.onclick=e=>{e.stopPropagation();const r=b.getBoundingClientRect();burst(r.left+28,r.top+28,10);b.remove();score++;sc.textContent="🫧 Burbujas reventadas: "+score;sc.classList.remove("bump");void sc.offsetWidth;sc.classList.add("bump");if(score%10===0)toast("🎉 ¡"+score+" burbujas!")};bub.append(b)}
+setInterval(spawn,1500);
+if(!lite&&!rm&&matchMedia("(pointer:fine)").matches){const cu=document.createElement("div");cu.className="cur";cu.textContent="🍦";document.body.append(cu);let tx=0,ty=0,cx=0,cy=0;addEventListener("pointermove",e=>{tx=e.clientX;ty=e.clientY;cu.style.opacity=1});document.documentElement.addEventListener("mouseleave",()=>cu.style.opacity=0);(function f(){cx+=(tx-cx)*.15;cy+=(ty-cy)*.15;cu.style.transform=`translate(${cx+14}px,${cy+14}px) rotate(${(tx-cx)*.6}deg)`;requestAnimationFrame(f)})()}
+let ls=scrollY,sk=0;addEventListener("scroll",()=>{const d=scrollY-ls;ls=scrollY;const m=$(".mq");m.style.transform=`rotate(-1.2deg) skewX(${Math.max(-18,Math.min(18,-d*.6))}deg)`;clearTimeout(sk);sk=setTimeout(()=>m.style.transform="",150)},{passive:true});
+function spinLogo(){$("#lg").animate([{transform:"rotateY(0)"},{transform:"rotateY(360deg) scale(1.2)"},{transform:"rotateY(720deg)"}],{duration:900,easing:"ease-in-out"});burst(80,30,10)}
+
+// ===== v5: más dinamismo =====
+for(let i=0;i<(lite?3:8);i++){const d=document.createElement("span");d.className="dr";d.style.cssText=`left:${8+i*11+Math.random()*6}%;animation-duration:${4+Math.random()*4}s;animation-delay:-${Math.random()*6}s;background:${["#ff3d8b","#19c8a6","#ffb627"][i%3]}`;hero.append(d)}
+(function(){const el=$("#tw");let i=0,j=0,del=0;function tick(){const ws=S.prods.filter(p=>p.a).map(p=>p.n);if(!ws.length)return setTimeout(tick,2000);const w=ws[i%ws.length];if(rm){el.textContent=w;i++;return setTimeout(tick,2200)}el.textContent=w.slice(0,j);if(!del&&j<w.length){j++;return setTimeout(tick,70)}if(!del){del=1;return setTimeout(tick,1400)}if(j>0){j--;return setTimeout(tick,35)}del=0;i++;setTimeout(tick,250)}tick()})();
+{const nv=$("nav");let lp=0;addEventListener("scroll",()=>{const y=scrollY;nv.classList.toggle("hd",y>120&&y>lp);lp=y},{passive:true})}
+setTimeout(()=>{const l=$("#ld");l.classList.add("out");setTimeout(()=>l.remove(),500)},rm?0:1000);
+menu();rc();
+</script></body></html>
